@@ -53,6 +53,7 @@
 
 1. 测试器硬件原理图、PCB以及BOM资料路径/Docs/Hardware/
 2. 测试器操作说明资料路径/Docs/UserManual/
+3. 测试器操作教程、升级教程以及原理讲解视频资料路径/Docs/Vedio/
 
 ### 使用说明
 - 测试器使用步骤详情见Docs/UserManual/<延时测试器操作说明.pdf>
