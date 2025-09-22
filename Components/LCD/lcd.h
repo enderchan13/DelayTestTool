@@ -93,5 +93,6 @@ void lcd_device_state_set(uint8_t sta);
 void lcd_test_mode_set(uint8_t mode);
 void lcd_test_state_set(uint8_t sta);
 void lcd_test_data_anomaly_set(uint8_t sta);
+void lcd_test_cnt_set(uint8_t cnt);
 
 #endif

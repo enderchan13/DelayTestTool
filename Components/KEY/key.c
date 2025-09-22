@@ -38,22 +38,32 @@ extern uint8_t  triangle_wave_flag;
 extern uint8_t  simulation_curve_flag;
 extern uint8_t  test_mode;
 extern uint8_t  test_sta;
+extern uint8_t  test_cnt;
+extern uint8_t  test_cnt_mode;
 
 static void swkey1_short_press_handle(void)
 {
     printf("swkey1_short_press_handle\r\n");
-    #if 0
-    static uint8_t flag;
-    flag = !flag;
-    if (flag) {
-        // 2000 2.1V 2500 1.7V 3000 1.34V
-        DAC_SetChannel1Data(DAC_Align_12b_R, 1500);
-        HALL_LDO_EN(1);
-    } else {
-        DAC_SetChannel1Data(DAC_Align_12b_R, 0);
-        HALL_LDO_EN(0);
+    if (simulation_curve_flag || square_wave_flag || triangle_wave_flag)
+        return;
+
+    if (++test_cnt_mode >= 4) {
+        test_cnt_mode = 0;
     }
-    #endif
+    if (test_cnt_mode == 0) {
+        test_cnt = 100;
+        lcd_test_cnt_set(0);
+    } else if (test_cnt_mode == 1) {
+        test_cnt = 1;
+        lcd_test_cnt_set(1);
+    } else if (test_cnt_mode == 2) {
+        test_cnt = 10;
+        lcd_test_cnt_set(10);
+    } else if (test_cnt_mode == 3) {
+        test_cnt = 100;
+        lcd_test_cnt_set(100);
+    }
+    
 }
 
 static void swkey1_long_press_start_handle(void)
@@ -74,10 +84,11 @@ static void swkey1_double_click_handle(void)
 static void swkey2_short_press_handle(void)
 {
     printf("swkey2_short_press_handle\r\n");
-    if (simulation_curve_flag || square_wave_flag)
+    if (simulation_curve_flag || square_wave_flag || triangle_wave_flag)
         return;
 
-    test_mode = !test_mode;
+    if (++test_mode > 2)
+        test_mode = 0;
 }
 
 static void swkey2_long_press_start_handle(void)
@@ -98,10 +109,25 @@ static void swkey2_double_click_handle(void)
 static void swkey3_short_press_handle(void)
 {
     printf("swkey3_short_press_handle\r\n");
-    if (test_mode) {
+    if (test_mode == 0) {
         simulation_curve_flag = 1;
-    } else {
+    } else if (test_mode == 1) {
         square_wave_flag = 1;
+    } else if (test_mode == 2) {
+        triangle_wave_flag = 1;
+    }
+    if (test_cnt_mode == 0) {
+        test_cnt = 100;
+        lcd_test_cnt_set(0);
+    } else if (test_cnt_mode == 1) {
+        test_cnt = 1;
+        lcd_test_cnt_set(1);
+    } else if (test_cnt_mode == 2) {
+        test_cnt = 10;
+        lcd_test_cnt_set(10);
+    } else if (test_cnt_mode == 3) {
+        test_cnt = 100;
+        lcd_test_cnt_set(100);
     }
 }
 
@@ -125,6 +151,7 @@ static void swkey4_short_press_handle(void)
     printf("swkey4_short_press_handle\r\n");
     simulation_curve_flag = 0;
     square_wave_flag = 0;
+    triangle_wave_flag = 0;
     HALL_LDO_EN(0);
     test_sta = 2;
     lcd_test_data_anomaly_set(2);

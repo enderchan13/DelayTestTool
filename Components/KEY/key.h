@@ -28,7 +28,7 @@ typedef struct {
 // 时间阈值定义 (单位: ms)
 #define SHORT_PRESS_MAX  400   // 短按最大持续时间
 #define LONG_PRESS_MIN   1000  // 长按最小持续时间
-#define DOUBLE_CLICK_MAX 300   // 双击最大间隔
+#define DOUBLE_CLICK_MAX 250   // 双击最大间隔
 #define DEBOUNCE_TIME    20    // 按键防抖时间
 #define HOLD_REPEAT_TIME 100   // 长按保持重复时间
 

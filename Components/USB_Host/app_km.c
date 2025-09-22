@@ -2016,15 +2016,16 @@ void USBH_MainDeal( void )
 #if DEF_DEBUG_PRINTF
                                 /* 过滤掉非按键键值的报文 */
                                 if (!dev_intf_type[intf_num]) {
-                                    extern uint8_t square_single_press_flag;
-                                    extern uint8_t square_single_release_flag;
-                                    extern uint8_t square_wave_flag;
+                                    extern uint8_t  square_single_press_flag;
+                                    extern uint8_t  square_single_release_flag;
+                                    extern uint8_t  square_wave_flag;
                                     extern uint8_t  triangle_wave_flag;
                                     extern uint8_t  triangle_wave_press_flag;
                                     extern uint8_t  triangle_wave_release_flag;
                                     extern uint8_t  simulation_curve_flag;
                                     extern uint8_t  simulation_curve_press_flag;
                                     extern uint8_t  simulation_curve_release_flag;
+                                    extern uint16_t multi_key_Judg_cnt;
                                     #if 0
                                     static uint8_t key_cnt;
                                     static uint8_t key_code;
@@ -2048,7 +2049,6 @@ void USBH_MainDeal( void )
                                                 break;
                                             } else {
                                                 if (cnt == key_cnt && key_sta) {
-                                                    key_release_cnt++;
                                                     square_single_release_flag = 0;
                                                     printf("lift keycode: %2x\r\n", key_code);
                                                     key_cnt = 0;
@@ -2062,35 +2062,38 @@ void USBH_MainDeal( void )
                                     if (square_wave_flag) {
                                         if (square_single_press_flag) {
                                             square_single_press_flag = 0;
-                                            printf("key press\r\n");
+                                            // printf("key press\r\n");
                                         }
                                         if (square_single_release_flag) {
                                             square_single_release_flag = 0;
-                                            printf("key lift\r\n");
+                                            // printf("key lift\r\n");
                                         }
                                         key_trigger_cnt++;
+                                        multi_key_Judg_cnt++;
                                     }
                                     if (triangle_wave_flag == 3) {
                                         if (triangle_wave_press_flag) {
                                             triangle_wave_press_flag = 0;
-                                            printf("key press\r\n");
+                                            // printf("key press\r\n");
                                         }
                                         if (triangle_wave_release_flag) {
                                             triangle_wave_release_flag = 0;
-                                            printf("key lift\r\n");
+                                            // printf("key lift\r\n");
                                         }
                                         key_trigger_cnt++;
+                                        multi_key_Judg_cnt++;
                                     }
                                     if (simulation_curve_flag) {
                                         if (simulation_curve_press_flag) {
                                             simulation_curve_press_flag = 0;
-                                            printf("key press\r\n");
+                                            // printf("key press\r\n");
                                         }
                                         if (simulation_curve_release_flag) {
                                             simulation_curve_release_flag = 0;
-                                            printf("key lift\r\n");
+                                            // printf("key lift\r\n");
                                         }
                                         key_trigger_cnt++;
+                                        multi_key_Judg_cnt++;
                                     }
                                 }
                                 if (!dev_intf_type[intf_num]) {
@@ -2099,6 +2102,7 @@ void USBH_MainDeal( void )
                                         DUG_PRINTF( "%02x ", Com_Buf[ i ] );
                                     }
                                     DUG_PRINTF( "\r\n" );
+                                    // printf("tim4 tick: %d\r\n", get_tim4_10us());
                                 }
 #endif
                                 

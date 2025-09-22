@@ -27,59 +27,58 @@
 
 static volatile uint32_t waveIndex = 0;
 
-uint8_t  product_name[20];
-uint8_t  dev_sta = 0;
-uint32_t press_delay = 9999;
-uint32_t lift_delay  = 9999;
-uint8_t  test_mode = 0;
-uint8_t  test_sta = 0;
-uint16_t key_trigger_cnt = 0;
-uint16_t key_release_cnt = 0;
+uint8_t  product_name[20];          /* 设备名称 */
+uint8_t  dev_sta = 0;               /* 设备状态 */
+uint32_t press_delay = 9999;        /* 按下延时 */
+uint32_t lift_delay  = 9999;        /* 抬起延时 */
+uint8_t  test_mode = 0;             /* 测试模式 */
+uint8_t  test_sta = 0;              /* 测试状态 */
+uint8_t  test_cnt = DELAY_TEST_CNT; /* 测试次数 */
+uint8_t  test_cnt_mode = 0;         /* 测试次数模式 */
+uint16_t key_trigger_cnt = 0;       /* 一次测试的多键判断计数 */
+uint16_t multi_key_Judg_cnt = 0;    /* 一次按下/抬起动作的多键判断计数 */
 
-uint8_t  square_wave_flag = 0;
-uint16_t square_wave_cnt = 0;
-uint32_t square_wave_time = 0;
-uint8_t  square_single_press_flag = 0;
-uint8_t  square_single_release_flag = 0;
-uint32_t square_single_trigger_cnt  = 0;
-uint32_t square_single_release_cnt  = 0;
-uint16_t square_trigger_delay_time_buf[DELAY_TEST_CNT] = {0};
-uint16_t square_release_delay_time_buf[DELAY_TEST_CNT] = {0};
-uint32_t square_trigger_delay_time = 0;
-uint32_t square_release_delay_time = 0;
-uint8_t  square_data_invalid = 0;
-uint8_t  square_trigger_sta = 0;
-uint32_t square_test_cnt = DELAY_TEST_CNT;
+uint8_t  square_wave_flag = 0;              /* 方波开启标志 */
+uint16_t square_wave_cnt = 0;               /* 方波周期计数 */
+uint32_t square_wave_time = 0;              /* 方波计时器 */
+uint8_t  square_single_press_flag = 0;      /* 方波按下标志 */
+uint8_t  square_single_release_flag = 0;    /* 方波抬起标志 */
+uint32_t square_single_trigger_cnt  = 0;    /* 方波按下计数器 */
+uint32_t square_single_release_cnt  = 0;    /* 方波抬起计数器 */
+uint16_t square_trigger_delay_time_buf[DELAY_TEST_CNT] = {0};   /* 方波按下延时数据缓存 */
+uint16_t square_release_delay_time_buf[DELAY_TEST_CNT] = {0};   /* 方波抬起延时数据缓存 */ 
+uint32_t square_trigger_delay_time = 0;     /* 方波按下平均延时 */
+uint32_t square_release_delay_time = 0;     /* 方波抬起平均延时 */
+uint8_t  square_data_invalid = 0;           /* 方波数据有效标志 */
+uint8_t  square_trigger_sta = 0;            /* 方波高低电平状态 */
 
-uint8_t  triangle_wave_flag = 0;
-uint32_t triangle_wave_cnt = 0;
-uint32_t triangle_wave_time = 0;
-uint8_t  triangle_wave_press_flag = 0;
-uint8_t  triangle_wave_release_flag = 0;
-uint32_t triangle_single_trigger_cnt = 0;
-uint32_t triangle_single_release_cnt = 0;
-uint16_t triangle_trigger_delay_time_buf[DELAY_TEST_CNT] = {0};
-uint16_t triangle_release_delay_time_buf[DELAY_TEST_CNT] = {0};
-uint32_t triangle_trigger_delay_time = 0;
-uint32_t triangle_release_delay_time = 0;
-uint8_t  triangle_data_invalid = 0;
+uint8_t  triangle_wave_flag = 0;            /* 三角波开启标志 */
+uint32_t triangle_wave_cnt = 0;             /* 三角波周期计数 */
+uint32_t triangle_wave_time = 0;            /* 三角波计时器 */
+uint8_t  triangle_wave_press_flag = 0;      /* 三角波按下标志 */
+uint8_t  triangle_wave_release_flag = 0;    /* 三角波抬起标志 */
+uint32_t triangle_single_trigger_cnt = 0;   /* 三角波按下计数器 */
+uint32_t triangle_single_release_cnt = 0;   /* 三角波抬起计数器 */
+uint16_t triangle_trigger_delay_time_buf[DELAY_TEST_CNT] = {0};     /* 三角波按下延时数据缓存 */
+uint16_t triangle_release_delay_time_buf[DELAY_TEST_CNT] = {0};     /* 三角波抬起延时数据缓存 */
+uint32_t triangle_trigger_delay_time = 0;   /* 三角波按下平均延时 */
+uint32_t triangle_release_delay_time = 0;   /* 三角波抬起平均延时 */
+uint8_t  triangle_data_invalid = 0;         /* 三角波数据有效标志 */
 
-uint8_t  simulation_curve_flag = 0;
-uint32_t simulation_curve_cnt = 0;
-uint32_t simulation_curve_time = 0;
-uint8_t  simulation_curve_press_flag = 0;
-uint8_t  simulation_curve_release_flag = 0;
-uint32_t simulation_curve_single_trigger_cnt = 0;
-uint32_t simulation_curve_single_release_cnt = 0;
-uint16_t simulation_curve_trigger_delay_time_buf[DELAY_TEST_CNT] = {0};
-uint16_t simulation_curve_release_delay_time_buf[DELAY_TEST_CNT] = {0};
-uint32_t simulation_curve_trigger_delay_time = 0;
-uint32_t simulation_curve_release_delay_time = 0;
-uint8_t  simulation_curve_data_invalid = 0;
-uint32_t simulation_curve_timeout = 0;
-uint32_t simulation_curve_test_cnt = DELAY_TEST_CNT;
+uint8_t  simulation_curve_flag = 0;         /* 仿真点击开启标志 */
+uint32_t simulation_curve_cnt = 0;          /* 仿真点击周期计数 */
+uint32_t simulation_curve_time = 0;         /* 仿真点击计时器 */
+uint8_t  simulation_curve_press_flag = 0;   /* 仿真点击按下标志 */
+uint8_t  simulation_curve_release_flag = 0; /* 仿真点击抬起标志 */
+uint32_t simulation_curve_single_trigger_cnt = 0;   /* 仿真点击按下计数器 */
+uint32_t simulation_curve_single_release_cnt = 0;   /* 仿真点击抬起计数器 */
+uint16_t simulation_curve_trigger_delay_time_buf[DELAY_TEST_CNT] = {0};     /* 仿真点击按下延时数据缓存 */
+uint16_t simulation_curve_release_delay_time_buf[DELAY_TEST_CNT] = {0};     /* 仿真点击抬起延时数据缓存 */
+uint32_t simulation_curve_trigger_delay_time = 0;   /* 仿真点击按下平均延时 */
+uint32_t simulation_curve_release_delay_time = 0;   /* 仿真点击抬起平均延时 */
+uint8_t  simulation_curve_data_invalid = 0;         /* 仿真点击数据有效标志 */
+uint32_t simulation_curve_timeout = 0;              /* 仿真点击周期超时计数器 */
 
-#if 1
 static uint16_t sineWaveTable[SINE_WAVE_POINTS] = {
     2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
     2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
@@ -122,21 +121,21 @@ static uint16_t sineWaveTable[SINE_WAVE_POINTS] = {
     2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
     2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
 
-    2000, 2010, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090,
-    2100, 2110, 2120, 2130, 2140, 2150, 2160, 2170, 2180, 2190,
-    2200, 2210, 2220, 2230, 2240, 2250, 2260, 2270, 2280, 2290,
-    2300, 2310, 2320, 2330, 2340, 2350, 2360, 2370, 2380, 2390,
-    2400, 2410, 2420, 2430, 2440, 2450, 2460, 2470, 2480, 2490,
-    2500, 2510, 2520, 2530, 2540, 2550, 2560, 2570, 2580, 2590,
-    2600, 2610, 2620, 2630, 2640, 2650, 2660, 2670, 2680, 2690,
-    2700, 2710, 2720, 2730, 2740, 2750, 2760, 2770, 2780, 2790,
-    2800, 2810, 2820, 2830, 2840, 2850, 2860, 2870, 2880, 2890,
-    2900, 2910, 2920, 2930, 2940, 2950, 2960, 2970, 2980, 2990,
-    3000, 3010, 3020, 3030, 3040, 3050, 3060, 3070, 3080, 3090,
-    3100, 3110, 3120, 3130, 3140, 3150, 3160, 3170, 3180, 3190,
-    3200, 3210, 3220, 3230, 3240, 3250, 3260, 3270, 3280, 3290,
-    3300, 3310, 3320, 3330, 3340, 3350, 3360, 3370, 3380, 3390,
-    3400, 3410, 3420, 3430, 3440, 3450, 3460, 3470, 3480, 3490,
+    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
+    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
+    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
+    2000, 2001, 2002, 2005, 2007, 2010, 2012, 2016, 2019, 2021,
+    2025, 2028, 2031, 2036, 2041, 2045, 2050, 2056, 2061, 2066,
+    2072, 2077, 2083, 2089, 2096, 2102, 2107, 2114, 2119, 2125,
+    2132, 2139, 2147, 2155, 2164, 2172, 2180, 2190, 2199, 2210,
+    2222, 2234, 2247, 2260, 2274, 2290, 2305, 2321, 2337, 2354,
+    2373, 2391, 2410, 2429, 2449, 2470, 2492, 2513, 2535, 2557,
+    2580, 2603, 2626, 2649, 2672, 2695, 2718, 2742, 2765, 2789,
+    2812, 2836, 2860, 2883, 2906, 2929, 2951, 2973, 2994, 3015,
+    3037, 3057, 3077, 3098, 3118, 3136, 3156, 3173, 3191, 3208,
+    3226, 3243, 3259, 3275, 3291, 3306, 3320, 3334, 3348, 3361,
+    3373, 3385, 3396, 3408, 3419, 3430, 3442, 3453, 3462, 3471,
+    3481, 3490, 3495, 3498, 3498, 3499, 3500, 3500, 3500, 3500,
 
     3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
     3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
@@ -179,121 +178,12 @@ static uint16_t sineWaveTable[SINE_WAVE_POINTS] = {
     3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
     3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
 
-    3470, 3440, 3410, 3380, 3350, 3320, 3290, 3260, 3230, 3200,
-    3170, 3140, 3110, 3080, 3050, 3020, 2990, 2960, 2930, 2900,
-    2870, 2840, 2810, 2780, 2750, 2720, 2690, 2660, 2630, 2600,
-    2570, 2540, 2510, 2480, 2450, 2420, 2390, 2360, 2330, 2300,
-    2270, 2240, 2210, 2180, 2150, 2120, 2090, 2060, 2030, 2000,
+    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
+    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3496, 3490, 
+    3483, 3475, 3466, 3454, 3440, 3423, 3404, 3382, 3357, 3329, 
+    3297, 3263, 3224, 3180, 3134, 3086, 3033, 2977, 2918, 2856, 
+    2789, 2718, 2645, 2568, 2486, 2399, 2309, 2212, 2110, 2000,
 };
-#endif
-
-#if 0
-static uint16_t sineWaveTable[SINE_WAVE_POINTS] = {
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-    2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-
-    2004, 2008, 2013, 2018, 2024, 2030, 2037, 2044, 2052, 2060, 
-    2071, 2082, 2093, 2104, 2115, 2126, 2137, 2148, 2159, 2170, 
-    2181, 2192, 2203, 2214, 2225, 2236, 2247, 2258, 2269, 2280, 
-    2291, 2302, 2313, 2324, 2335, 2346, 2357, 2368, 2379, 2395,
-    2411, 2422, 2433, 2444, 2455, 2466, 2477, 2488, 2499, 2510, 
-    2521, 2532, 2543, 2554, 2565, 2576, 2587, 2598, 2609, 2620, 
-    2631, 2642, 2653, 2664, 2675, 2686, 2697, 2708, 2719, 2730, 
-    2741, 2752, 2763, 2774, 2785, 2796, 2807, 2818, 2829, 2840, 
-    2851, 2862, 2873, 2884, 2895, 2906, 2917, 2928, 2939, 2950, 
-    2961, 2972, 2983, 2994, 3005, 3016, 3027, 3038, 3049, 3060, 
-    3071, 3082, 3093, 3104, 3115, 3126, 3137, 3148, 3159, 3170, 
-    3181, 3192, 3203, 3214, 3225, 3236, 3247, 3258, 3269, 3280, 
-    3291, 3302, 3313, 3324, 3335, 3346, 3357, 3368, 3379, 3390, 
-    3401, 3412, 3423, 3434, 3445, 3456, 3467, 3478, 3489, 3500,
-
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-    3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-
-    3470, 3440, 3410, 3380, 3350, 3320, 3290, 3260, 3230, 3200,
-    3160, 3120, 3080, 3040, 3000, 2960, 2920, 2880, 2840, 2800, 
-    2760, 2720, 2680, 2640, 2600, 2560, 2520, 2480, 2440, 2400, 
-    2360, 2320, 2280, 2240, 2200, 2160, 2120, 2080, 2040, 2000,
-};
-#endif
 
 /*********************************************************************
  * @fn      Dac_Init
@@ -344,10 +234,13 @@ static void dac_simulation_curve_generate(void)
     if (simulation_curve_flag_temp != simulation_curve_flag) {
         simulation_curve_flag_temp = simulation_curve_flag;
         if (simulation_curve_flag) {
+            multi_key_Judg_cnt = 0;
             simulation_curve_cnt = 0;
             simulation_curve_time = get_tim4_10us();
             simulation_curve_data_invalid = 0;
             test_sta = 1;
+            simulation_curve_single_trigger_cnt = 0;
+            simulation_curve_single_release_cnt = 0;
             simulation_curve_trigger_delay_time = 0;
             simulation_curve_release_delay_time = 0;
             key_trigger_cnt = 0;
@@ -370,41 +263,67 @@ static void dac_simulation_curve_generate(void)
             if (waveIndex++ >= SINE_WAVE_POINTS) {
                 waveIndex = 0;
                 ++simulation_curve_cnt;
-                simulation_curve_single_trigger_cnt = 0;
-                simulation_curve_single_release_cnt = 0;
-            }
-            if (waveIndex == 401) {
-                simulation_curve_release_flag = 1;
             }
 
-            if (waveIndex == 950) {
+            if (waveIndex == 430) {
+                if (simulation_curve_cnt == 2) {
+                    if (multi_key_Judg_cnt == 0 && test_cnt_mode == 0) {
+                        simulation_curve_flag = 0;
+                        lcd_test_data_anomaly_set(2);
+                    }
+                }
+                simulation_curve_release_flag = 1;
+                simulation_curve_single_release_cnt = 0;
+                multi_key_Judg_cnt = 0;
+                // printf("start key lift, tim4 tick: %d\r\n", get_tim4_10us());
+            }
+
+            if (waveIndex == 967) {
+                if (simulation_curve_cnt == 2) {
+                    if (multi_key_Judg_cnt == 0 && test_cnt_mode == 0) {
+                        simulation_curve_flag = 0;
+                        lcd_test_data_anomaly_set(2);
+                    }
+                }
                 simulation_curve_press_flag = 1;
+                simulation_curve_single_trigger_cnt = 0;
+                multi_key_Judg_cnt = 0;
+                // printf("start key press, tim4 tick: %d\r\n", get_tim4_10us());
             }
             DAC_SetChannel1Data(DAC_Align_12b_R, sineWaveTable[waveIndex]);
             simulation_curve_time = get_tim4_10us();
+            if (multi_key_Judg_cnt >= 2 && test_cnt_mode == 0) {
+                simulation_curve_flag = 0;
+                printf("The keyboard has a double touch issue, sending %d packets in a single press or release event.\r\n", multi_key_Judg_cnt);
+                multi_key_Judg_cnt = 0;
+                test_cnt = simulation_curve_cnt - 1;
+            }
         }
     }
 
-    if (simulation_curve_cnt > DELAY_TEST_CNT) {
+    if (simulation_curve_cnt >= test_cnt) {
         DAC_SetChannel1Data(DAC_Align_12b_R, 0);
         HALL_LDO_EN(0);
         simulation_curve_cnt = 0;
         simulation_curve_flag = 0;
-        if (key_trigger_cnt > ((DELAY_TEST_CNT << 1) + 20)) {
-            printf("key trigger cnt: %d\r\n", key_trigger_cnt);
-            simulation_curve_data_invalid = 1;
-        } else if (key_trigger_cnt > (DELAY_TEST_CNT << 1)) {
-            printf("key trigger cnt: %d\r\n", key_trigger_cnt);
-            simulation_curve_test_cnt = (key_trigger_cnt >> 1);
+        if (test_cnt_mode) {
+            if (key_trigger_cnt > ((test_cnt << 1) + 1)) {
+                printf("key trigger cnt: %d\r\n", key_trigger_cnt);
+                simulation_curve_data_invalid = 1;
+            } else {
+                printf("key trigger cnt: %d\r\n", key_trigger_cnt);
+            }
+        } else {
+            lcd_test_cnt_set(test_cnt);
         }
 
-        for (uint8_t i = 0; i < simulation_curve_test_cnt; i++) {
+        for (uint8_t i = 0; i < test_cnt; i++) {
             printf("simulation_curve_trigger_delay_time_buf[%d]: %d\r\n", i, simulation_curve_trigger_delay_time_buf[i]);
         }
-        for (uint8_t i = 0; i < simulation_curve_test_cnt; i++) {
+        for (uint8_t i = 0; i < test_cnt; i++) {
             printf("simulation_curve_release_delay_time_buf[%d]: %d\r\n", i, simulation_curve_release_delay_time_buf[i]);
         }
-        for (uint8_t i = 0; i < simulation_curve_test_cnt; i++) {
+        for (uint8_t i = 0; i < test_cnt; i++) {
             simulation_curve_trigger_delay_time += simulation_curve_trigger_delay_time_buf[i];
             simulation_curve_release_delay_time += simulation_curve_release_delay_time_buf[i];
             if (simulation_curve_trigger_delay_time_buf[i] == 0xffff) {
@@ -416,8 +335,8 @@ static void dac_simulation_curve_generate(void)
                 break;
             }
         }
-        simulation_curve_trigger_delay_time = simulation_curve_trigger_delay_time / simulation_curve_test_cnt;
-        simulation_curve_release_delay_time = simulation_curve_release_delay_time / simulation_curve_test_cnt;
+        simulation_curve_trigger_delay_time = simulation_curve_trigger_delay_time / test_cnt;
+        simulation_curve_release_delay_time = simulation_curve_release_delay_time / test_cnt;
         if (simulation_curve_data_invalid) {
             simulation_curve_trigger_delay_time = 0;
             simulation_curve_release_delay_time = 0;
@@ -427,6 +346,15 @@ static void dac_simulation_curve_generate(void)
             lcd_lift_delay_time_set(simulation_curve_release_delay_time);
             printf("trigger delay time: %d\r\n", simulation_curve_trigger_delay_time);
             printf("release delay time: %d\r\n", simulation_curve_release_delay_time);
+        }
+        if (test_cnt_mode == 0) {
+            test_cnt = 100;
+        } else if (test_cnt_mode == 1) {
+            test_cnt = 1;
+        } else if (test_cnt_mode == 2) {
+            test_cnt = 10;
+        } else if (test_cnt_mode == 3) {
+            test_cnt = 100;
         }
     }
 
@@ -443,7 +371,11 @@ static void dac_triangle_wave_generate(void)
         test_sta = 1;
         DAC_SetChannel1Data(DAC_Align_12b_R, min);
         HALL_LDO_EN(1);
+        rising = 1;
+        val = WAVE_TRIGGER_DAC_VALUE;
+        multi_key_Judg_cnt = 0;
         key_trigger_cnt = 0;
+        triangle_wave_cnt = 0;
         triangle_wave_flag = 2;
         triangle_wave_time = get_tim4_10us();
         triangle_data_invalid = 0;
@@ -452,7 +384,7 @@ static void dac_triangle_wave_generate(void)
         triangle_trigger_delay_time = 0;
         triangle_release_delay_time = 0;
         memset(triangle_trigger_delay_time_buf, 0xff, sizeof(triangle_trigger_delay_time_buf));
-        memset(triangle_trigger_delay_time_buf, 0xff, sizeof(triangle_release_delay_time_buf));
+        memset(triangle_release_delay_time_buf, 0xff, sizeof(triangle_release_delay_time_buf));
         printf("Triangle Wave Mode Delay Test Start\r\n");
     } else if ((triangle_wave_flag == 2) && (get_tim4_dt_10us(triangle_wave_time) >= 2000)) {
         triangle_wave_flag = 3;
@@ -460,7 +392,14 @@ static void dac_triangle_wave_generate(void)
     } else if (triangle_wave_flag == 3) {
         if (get_tim4_dt_10us(triangle_wave_time) >= 2) {
             if (val == min) {
+                if (triangle_wave_cnt == 2) {
+                    if (multi_key_Judg_cnt == 0 && test_cnt_mode == 0) {
+                        triangle_wave_flag = 0;
+                        lcd_test_data_anomaly_set(2);
+                    }
+                }
                 triangle_wave_release_flag = 1;
+                multi_key_Judg_cnt = 0;
             }
             if (rising) {
                 val += step;
@@ -479,7 +418,14 @@ static void dac_triangle_wave_generate(void)
                 }
             }
             if (val == max) {
+                if (triangle_wave_cnt == 2) {
+                    if (multi_key_Judg_cnt == 0 && test_cnt_mode == 0) {
+                        triangle_wave_flag = 0;
+                        lcd_test_data_anomaly_set(2);
+                    }
+                }
                 triangle_wave_press_flag = 1;
+                multi_key_Judg_cnt = 0;
             }
             if (triangle_wave_flag == 3) {
                 DAC_SetChannel1Data(DAC_Align_12b_R, val);
@@ -487,25 +433,40 @@ static void dac_triangle_wave_generate(void)
                 triangle_wave_time = get_tim4_10us();
             }
         }
+        if (multi_key_Judg_cnt >= 2 && test_cnt_mode == 0) {
+            test_sta = 2;
+            triangle_wave_flag = 0;
+            printf("The keyboard has a double touch issue, sending %d packets in a single press or release event.\r\n", multi_key_Judg_cnt);
+            multi_key_Judg_cnt = 0;
+            test_cnt = triangle_wave_cnt - 1;
+            lcd_test_cnt_set(test_cnt);
+        }
     }
 
-    if (triangle_wave_cnt >= DELAY_TEST_CNT) {
+    if (triangle_wave_cnt >= test_cnt) {
         test_sta = 2;
         triangle_wave_cnt = 0;
         triangle_wave_flag = 0;
         DAC_SetChannel1Data(DAC_Align_12b_R, 0);
         HALL_LDO_EN(0);
-        if (key_trigger_cnt > (DELAY_TEST_CNT << 1)) {
-            printf("key trigger cnt: %d\r\n", key_trigger_cnt);
-            triangle_data_invalid = 1;
+        if (test_cnt_mode) {
+            if (key_trigger_cnt > ((test_cnt << 1) + 1)) {
+                printf("key trigger cnt: %d\r\n", key_trigger_cnt);
+                triangle_data_invalid = 1;
+            } else {
+                printf("key trigger cnt: %d\r\n", key_trigger_cnt);
+            }
+        } else {
+            lcd_test_cnt_set(test_cnt);
         }
-        for (uint8_t i = 0; i < DELAY_TEST_CNT; i++) {
+
+        for (uint8_t i = 0; i < test_cnt; i++) {
             printf("triangle_trigger_delay_time_buf[%d]: %d\r\n", i, triangle_trigger_delay_time_buf[i]);
         }
-        for (uint8_t i = 0; i < DELAY_TEST_CNT; i++) {
+        for (uint8_t i = 0; i < test_cnt; i++) {
             printf("triangle_release_delay_time_buf[%d]: %d\r\n", i, triangle_release_delay_time_buf[i]);
         }
-        for (uint8_t i = 0; i < DELAY_TEST_CNT; i++) {
+        for (uint8_t i = 0; i < test_cnt; i++) {
             triangle_trigger_delay_time += triangle_trigger_delay_time_buf[i];
             triangle_release_delay_time += triangle_release_delay_time_buf[i];
             if (triangle_trigger_delay_time_buf[i] == 0xffff) {
@@ -517,8 +478,8 @@ static void dac_triangle_wave_generate(void)
                 break;
             }
         }
-        triangle_trigger_delay_time = triangle_trigger_delay_time / DELAY_TEST_CNT;
-        triangle_release_delay_time = triangle_release_delay_time / DELAY_TEST_CNT;
+        triangle_trigger_delay_time = triangle_trigger_delay_time / test_cnt;
+        triangle_release_delay_time = triangle_release_delay_time / test_cnt;
         if (triangle_data_invalid) {
             triangle_trigger_delay_time = 0;
             triangle_release_delay_time = 0;
@@ -530,6 +491,15 @@ static void dac_triangle_wave_generate(void)
             printf("release delay time: %d\r\n", triangle_release_delay_time);
         }
         printf("Triangle Wave Mode Delay Test Finish\r\n");
+        if (test_cnt_mode == 0) {
+            test_cnt = 100;
+        } else if (test_cnt_mode == 1) {
+            test_cnt = 1;
+        } else if (test_cnt_mode == 2) {
+            test_cnt = 10;
+        } else if (test_cnt_mode == 3) {
+            test_cnt = 100;
+        }
     }
 }
 
@@ -539,7 +509,10 @@ static void dac_square_wave_wave_generate(void)
     if (square_wave_flag != trig_start_flag_temp) {
         trig_start_flag_temp = square_wave_flag;
         if (square_wave_flag) {
-            square_trigger_sta = 1;
+            DAC_SetChannel1Data(DAC_Align_12b_R, WAVE_TRIGGER_DAC_VALUE);
+            HALL_LDO_EN(1);
+            multi_key_Judg_cnt = 0;
+            square_trigger_sta = 0;
             square_wave_cnt = 0;
             square_wave_time = get_sys_time_ms();
             square_data_invalid = 0;
@@ -557,35 +530,36 @@ static void dac_square_wave_wave_generate(void)
         }
     }
     if (square_wave_flag) {
-        if (!square_trigger_sta && get_sys_dt_ms(square_wave_time) >= 30) {
-            DAC_SetChannel1Data(DAC_Align_12b_R, WAVE_RELEASE_DAC_VALUE);
-            HALL_LDO_EN(1);
-            square_single_release_flag = 1;
-            square_single_release_cnt = 0;
-            square_trigger_sta = 1;
-            square_wave_time = get_sys_time_ms();
+        if (multi_key_Judg_cnt >= 2 && test_cnt_mode == 0) {
+            printf("The keyboard has a double touch issue, sending %d packets in a single press or release event.\r\n", multi_key_Judg_cnt);
+            multi_key_Judg_cnt = 0;
+            test_cnt = square_wave_cnt - 1;
+            lcd_test_cnt_set(test_cnt);
         }
-        if (square_trigger_sta && get_sys_dt_ms(square_wave_time) >= 30) {
+        if (!square_trigger_sta && get_sys_dt_ms(square_wave_time) >= 30) {
             ++square_wave_cnt;
-            if (square_wave_cnt > DELAY_TEST_CNT) {
+            if (square_wave_cnt > test_cnt) {
                 DAC_SetChannel1Data(DAC_Align_12b_R, 0);
                 HALL_LDO_EN(0);
                 square_wave_cnt = 0;
                 square_wave_flag = 0;
-                if (key_trigger_cnt > ((DELAY_TEST_CNT << 1) + 20)) {
-                    printf("key trigger cnt: %d\r\n", key_trigger_cnt);
-                    square_data_invalid = 1;
-                } else if (key_trigger_cnt > (DELAY_TEST_CNT << 1)) {
-                    printf("key trigger cnt: %d\r\n", key_trigger_cnt);
-                    square_test_cnt = (key_trigger_cnt >> 1);
+                if (test_cnt_mode) {
+                    if (key_trigger_cnt > ((test_cnt << 1) + 1)) {
+                        printf("key trigger cnt: %d\r\n", key_trigger_cnt);
+                        square_data_invalid = 1;
+                    } else {
+                        printf("key trigger cnt: %d\r\n", key_trigger_cnt);
+                    }
+                } else {
+                    lcd_test_cnt_set(test_cnt);
                 }
-                for (uint8_t i = 0; i < square_test_cnt; i++) {
+                for (uint8_t i = 0; i < test_cnt; i++) {
                     printf("square_trigger_delay_time_buf[%d]: %d\r\n", i, square_trigger_delay_time_buf[i]);
                 }
-                for (uint8_t i = 0; i < square_test_cnt; i++) {
+                for (uint8_t i = 0; i < test_cnt; i++) {
                     printf("square_release_delay_time_buf[%d]: %d\r\n", i, square_release_delay_time_buf[i]);
                 }
-                for (uint8_t i = 0; i < square_test_cnt; i++) {
+                for (uint8_t i = 0; i < test_cnt; i++) {
                     square_trigger_delay_time += square_trigger_delay_time_buf[i];
                     square_release_delay_time += square_release_delay_time_buf[i];
                     if (square_trigger_delay_time_buf[i] == 0xffff) {
@@ -597,8 +571,8 @@ static void dac_square_wave_wave_generate(void)
                         break;
                     }
                 }
-                square_trigger_delay_time = square_trigger_delay_time / square_test_cnt;
-                square_release_delay_time = square_release_delay_time / square_test_cnt;
+                square_trigger_delay_time = square_trigger_delay_time / test_cnt;
+                square_release_delay_time = square_release_delay_time / test_cnt;
                 if (square_data_invalid) {
                     square_trigger_delay_time = 0;
                     square_release_delay_time = 0;
@@ -609,6 +583,38 @@ static void dac_square_wave_wave_generate(void)
                     printf("trigger delay time: %d\r\n", square_trigger_delay_time);
                     printf("release delay time: %d\r\n", square_release_delay_time);
                 }
+                if (test_cnt_mode == 0) {
+                    test_cnt = 100;
+                } else if (test_cnt_mode == 1) {
+                    test_cnt = 1;
+                } else if (test_cnt_mode == 2) {
+                    test_cnt = 10;
+                } else if (test_cnt_mode == 3) {
+                    test_cnt = 100;
+                }
+            }
+            if (square_wave_flag) {
+                if (square_wave_cnt == 2) {
+                    if (multi_key_Judg_cnt == 0 && test_cnt_mode == 0) {
+                        square_wave_flag = 0;
+                        lcd_test_data_anomaly_set(2);
+                    }
+                }
+                DAC_SetChannel1Data(DAC_Align_12b_R, WAVE_RELEASE_DAC_VALUE);
+                HALL_LDO_EN(1);
+                square_single_release_flag = 1;
+                square_single_release_cnt = 0;
+                square_trigger_sta = 1;
+                square_wave_time = get_sys_time_ms();
+                multi_key_Judg_cnt = 0;
+            }
+        }
+        if (square_trigger_sta && get_sys_dt_ms(square_wave_time) >= 30) {
+            if (square_wave_cnt == 2) {
+                if (multi_key_Judg_cnt == 0 && test_cnt_mode == 0) {
+                    square_wave_flag = 0;
+                    lcd_test_data_anomaly_set(2);
+                }
             }
             if (square_wave_flag) {
                 DAC_SetChannel1Data(DAC_Align_12b_R, WAVE_TRIGGER_DAC_VALUE);
@@ -617,6 +623,7 @@ static void dac_square_wave_wave_generate(void)
                 square_single_trigger_cnt = 0;
                 square_trigger_sta = 0;
                 square_wave_time = get_sys_time_ms();
+                multi_key_Judg_cnt = 0;
             }
         }
     }
@@ -716,10 +723,12 @@ int main( void )
 
         USBH_MainDeal( );
 
-        if (test_mode) {
+        if (test_mode == 0) {
             dac_simulation_curve_generate();
-        } else {
+        } else if (test_mode == 1) {
             dac_square_wave_wave_generate();
+        } else if (test_mode == 2) {
+            dac_triangle_wave_generate();
         }
 
     }

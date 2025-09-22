@@ -101,6 +101,19 @@ const uint8_t* image_main_device_num_addr[10] = {
     gImage_main_device_number_9,
 };
 
+const uint8_t* image_main_test_cnt_addr[10] = {
+    gImage_main_test_cnt_0,
+    gImage_main_test_cnt_1,
+    gImage_main_test_cnt_2,
+    gImage_main_test_cnt_3,
+    gImage_main_test_cnt_4,
+    gImage_main_test_cnt_5,
+    gImage_main_test_cnt_6,
+    gImage_main_test_cnt_7,
+    gImage_main_test_cnt_8,
+    gImage_main_test_cnt_9,
+};
+
 uint8_t* product_name_image_addr[20];
 uint32_t product_name_image_x0[20];
 uint8_t* press_delay_image_addr[5];
@@ -619,8 +632,9 @@ void lcd_init(void)
     lcd_show_image(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 78, 100, 20, (uint16_t *)gImage_main_lift_delay);
     lcd_show_image(LCD_HEIGHT_START + 10, LCD_WIDTH_START + 62, 80, 17, (uint16_t *)gImage_main_device_sta_disconnect);
     lcd_show_image(LCD_HEIGHT_START + 10, LCD_WIDTH_START + 86, 34, 14, (uint16_t *)gImage_main_test_mode);
-    lcd_show_image(LCD_HEIGHT_START + 47, LCD_WIDTH_START + 84, 28, 14, (uint16_t *)gImage_main_square_wave);
-    lcd_show_image(LCD_HEIGHT_START + 10, LCD_WIDTH_START + 103, 72, 22, (uint16_t *)gImage_main_test_sta_not_start);
+    lcd_show_image(LCD_HEIGHT_START + 47, LCD_WIDTH_START + 84, 56, 14, (uint16_t *)gImage_main_simulate_click);
+    lcd_show_image(LCD_HEIGHT_START + 10, LCD_WIDTH_START + 108, 35, 14, (uint16_t *)gImage_main_test_cnt_text);
+    lcd_test_cnt_set(0);
 }
 
 void lcd_press_delay_time_set(uint32_t press_delay)
@@ -728,30 +742,57 @@ void lcd_device_state_set(uint8_t sta)
 void lcd_test_mode_set(uint8_t mode)
 {
     lcd_select_area_fill_color(LCD_HEIGHT_START + 47, LCD_WIDTH_START + 84, LCD_HEIGHT_START + 47 + 56, LCD_WIDTH_START + 84 + 14, LCD_COLOR_BLACK);
-    if (mode) {
+    if (mode == 0) {
         lcd_show_image(LCD_HEIGHT_START + 47, LCD_WIDTH_START + 84, 56, 14, (uint16_t *)gImage_main_simulate_click);
-    } else {
+    } else if (mode == 1) {
         lcd_show_image(LCD_HEIGHT_START + 47, LCD_WIDTH_START + 84, 28, 14, (uint16_t *)gImage_main_square_wave);
+    } else if (mode == 2) {
+        lcd_show_image(LCD_HEIGHT_START + 47, LCD_WIDTH_START + 84, 42, 14, (uint16_t *)gImage_main_triangle_wave);
     }
 }
 
 void lcd_test_state_set(uint8_t sta)
 {
     if (sta == 1) {
-        lcd_show_image(LCD_HEIGHT_START + 10, LCD_WIDTH_START + 103, 72, 22, (uint16_t *)gImage_main_test_sta_progress);
+        lcd_select_area_fill_color(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 50, LCD_HEIGHT_START + 120 + 120, LCD_WIDTH_START + 50 + 24, LCD_COLOR_BLACK);
+        lcd_select_area_fill_color(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 106, LCD_HEIGHT_START + 120 + 120, LCD_WIDTH_START + 106 + 24, LCD_COLOR_BLACK);
+        lcd_show_image(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 50, 72, 22, (uint16_t *)gImage_main_test_sta_progress);
+        lcd_show_image(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 106, 72, 22, (uint16_t *)gImage_main_test_sta_progress);
     } else if (sta == 2) {
-        lcd_show_image(LCD_HEIGHT_START + 10, LCD_WIDTH_START + 103, 72, 22, (uint16_t *)gImage_main_test_sta_complete);
-    } else {
-        lcd_show_image(LCD_HEIGHT_START + 10, LCD_WIDTH_START + 103, 72, 22, (uint16_t *)gImage_main_test_sta_not_start);
+        // lcd_show_image(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 50, 72, 22, (uint16_t *)gImage_main_test_sta_complete);
+        // lcd_show_image(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 106, 72, 22, (uint16_t *)gImage_main_test_sta_complete);
     }
 }
 
 void lcd_test_data_anomaly_set(uint8_t sta)
 {
+    lcd_select_area_fill_color(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 50, LCD_HEIGHT_START + 120 + 120, LCD_WIDTH_START + 50 + 24, LCD_COLOR_BLACK);
+    lcd_select_area_fill_color(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 106, LCD_HEIGHT_START + 120 + 120, LCD_WIDTH_START + 106 + 24, LCD_COLOR_BLACK);
     if (sta == 1) {
         lcd_show_image(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 50, 98, 24, (uint16_t *)gImage_main_button_release);
     } else if (sta == 2) {
         lcd_show_image(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 50, 98, 24, (uint16_t *)gImage_main_othe_reasons);
     }
     lcd_show_image(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 106, 98, 24, (uint16_t *)gImage_main_data_anomaly);
+}
+
+void lcd_test_cnt_set(uint8_t cnt)
+{
+    if (cnt > 100)
+        return;
+
+    lcd_select_area_fill_color(LCD_HEIGHT_START + 45, LCD_WIDTH_START + 108, LCD_HEIGHT_START + 45 + 40, LCD_WIDTH_START + 108 + 14, LCD_COLOR_BLACK);
+    if (cnt == 0) {
+        lcd_show_image(LCD_HEIGHT_START + 45, LCD_WIDTH_START + 108, 28, 14, (uint16_t *)gImage_main_test_cnt_auto);
+    } if (cnt > 0 && cnt <= 9) {
+        lcd_show_image(LCD_HEIGHT_START + 45, LCD_WIDTH_START + 108, 9, 12, (uint16_t *)image_main_test_cnt_addr[cnt]);
+    } else if (cnt >= 10 && cnt <= 99) {
+        lcd_show_image(LCD_HEIGHT_START + 45, LCD_WIDTH_START + 108, 9, 12, (uint16_t *)image_main_test_cnt_addr[(cnt / 10)]);
+        lcd_show_image(LCD_HEIGHT_START + 45 + 10, LCD_WIDTH_START + 108, 9, 12, (uint16_t *)image_main_test_cnt_addr[(cnt % 10)]);
+    } else if (cnt == 100) {
+        lcd_show_image(LCD_HEIGHT_START + 45, LCD_WIDTH_START + 108, 9, 12, (uint16_t *)image_main_test_cnt_addr[1]);
+        lcd_show_image(LCD_HEIGHT_START + 45 + 10, LCD_WIDTH_START + 108, 9, 12, (uint16_t *)image_main_test_cnt_addr[0]);
+        lcd_show_image(LCD_HEIGHT_START + 45 + 10 + 10, LCD_WIDTH_START + 108, 9, 12, (uint16_t *)image_main_test_cnt_addr[0]);
+    }
+
 }
