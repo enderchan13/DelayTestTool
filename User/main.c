@@ -296,7 +296,15 @@ static void dac_simulation_curve_generate(void)
                 simulation_curve_flag = 0;
                 printf("The keyboard has a double touch issue, sending %d packets in a single press or release event.\r\n", multi_key_Judg_cnt);
                 multi_key_Judg_cnt = 0;
-                test_cnt = simulation_curve_cnt - 1;
+                printf("simulation_curve_cnt == %d\r\n", simulation_curve_cnt);
+                if (simulation_curve_cnt == 0) 
+                    simulation_curve_cnt = 1;
+
+                if (simulation_curve_cnt == 1) {
+                    test_cnt = simulation_curve_cnt;
+                } else {
+                    test_cnt = simulation_curve_cnt - 1;
+                }
             }
         }
     }
@@ -326,11 +334,11 @@ static void dac_simulation_curve_generate(void)
         for (uint8_t i = 0; i < test_cnt; i++) {
             simulation_curve_trigger_delay_time += simulation_curve_trigger_delay_time_buf[i];
             simulation_curve_release_delay_time += simulation_curve_release_delay_time_buf[i];
-            if (simulation_curve_trigger_delay_time_buf[i] == 0xffff) {
+            if (simulation_curve_trigger_delay_time_buf[i] == 0xffff || simulation_curve_trigger_delay_time_buf[i] > 30000) {
                 simulation_curve_data_invalid = 2;
                 break;
             }
-            if (simulation_curve_release_delay_time_buf[i] == 0xffff) {
+            if (simulation_curve_release_delay_time_buf[i] == 0xffff || simulation_curve_release_delay_time_buf[i] > 30000) {
                 simulation_curve_data_invalid = 2;
                 break;
             }
@@ -399,6 +407,7 @@ static void dac_triangle_wave_generate(void)
                     }
                 }
                 triangle_wave_release_flag = 1;
+                triangle_single_release_cnt = 0;
                 multi_key_Judg_cnt = 0;
             }
             if (rising) {
@@ -425,6 +434,7 @@ static void dac_triangle_wave_generate(void)
                     }
                 }
                 triangle_wave_press_flag = 1;
+                triangle_single_trigger_cnt = 0;
                 multi_key_Judg_cnt = 0;
             }
             if (triangle_wave_flag == 3) {
@@ -438,8 +448,15 @@ static void dac_triangle_wave_generate(void)
             triangle_wave_flag = 0;
             printf("The keyboard has a double touch issue, sending %d packets in a single press or release event.\r\n", multi_key_Judg_cnt);
             multi_key_Judg_cnt = 0;
-            test_cnt = triangle_wave_cnt - 1;
-            lcd_test_cnt_set(test_cnt);
+            printf("triangle_wave_cnt == %d\r\n", triangle_wave_cnt);
+            if (triangle_wave_cnt == 0) 
+                triangle_wave_cnt = 1;
+
+            if (triangle_wave_cnt == 1) {
+                test_cnt = triangle_wave_cnt;
+            } else {
+                test_cnt = triangle_wave_cnt - 1;
+            }
         }
     }
 
@@ -469,11 +486,11 @@ static void dac_triangle_wave_generate(void)
         for (uint8_t i = 0; i < test_cnt; i++) {
             triangle_trigger_delay_time += triangle_trigger_delay_time_buf[i];
             triangle_release_delay_time += triangle_release_delay_time_buf[i];
-            if (triangle_trigger_delay_time_buf[i] == 0xffff) {
+            if (triangle_trigger_delay_time_buf[i] == 0xffff || triangle_trigger_delay_time_buf[i] > 30000) {
                 triangle_data_invalid = 2;
                 break;
             }
-            if (triangle_release_delay_time_buf[i] == 0xffff) {
+            if (triangle_release_delay_time_buf[i] == 0xffff || triangle_release_delay_time_buf[i] > 30000) {
                 triangle_data_invalid = 2;
                 break;
             }
@@ -562,11 +579,11 @@ static void dac_square_wave_wave_generate(void)
                 for (uint8_t i = 0; i < test_cnt; i++) {
                     square_trigger_delay_time += square_trigger_delay_time_buf[i];
                     square_release_delay_time += square_release_delay_time_buf[i];
-                    if (square_trigger_delay_time_buf[i] == 0xffff) {
+                    if (square_trigger_delay_time_buf[i] == 0xffff || square_trigger_delay_time_buf[i] > 30000) {
                         square_data_invalid = 2;
                         break;
                     }
-                    if (square_release_delay_time_buf[i] == 0xffff) {
+                    if (square_release_delay_time_buf[i] == 0xffff || square_release_delay_time_buf[i] > 30000) {
                         square_data_invalid = 2;
                         break;
                     }
