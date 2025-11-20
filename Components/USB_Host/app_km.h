@@ -51,6 +51,7 @@ extern uint32_t press_delay;
 extern uint32_t lift_delay;
 extern uint8_t  test_start_flag;
 extern uint16_t key_trigger_cnt;
+extern uint8_t  test_trig_first_flag;
 
                                          
 /*******************************************************************************/

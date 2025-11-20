@@ -23,6 +23,7 @@ uint8_t  Com_Buf[ DEF_COM_BUF_LEN ];                                            
 struct   _ROOT_HUB_DEVICE RootHubDev[ DEF_TOTAL_ROOT_HUB ];
 struct   __HOST_CTL HostCtl[ DEF_TOTAL_ROOT_HUB * DEF_ONE_USB_SUP_DEV_TOTAL ];
 static   uint8_t dev_intf_type[DEF_INTERFACE_NUM_MAX];
+static   uint8_t dev_intf_trig_flag[DEF_INTERFACE_NUM_MAX];
 static   uint8_t dev_enum_invalid;
 
 /*******************************************************************************/
@@ -2059,6 +2060,19 @@ void USBH_MainDeal( void )
                                         }
                                     }
                                     #endif
+                                    if (square_wave_flag || triangle_wave_flag || simulation_curve_flag) {
+                                        // if (!test_trig_first_flag) {
+                                            // for (uint8_t i = 0; i < DEF_INTERFACE_NUM_MAX; i++) {
+                                                // if (!dev_intf_trig_flag[i]) {
+                                                    // if (i == (DEF_INTERFACE_NUM_MAX - 1))
+                                                        // test_trig_first_flag = 1;
+                                                // }
+                                            // }
+                                        // }
+                                        // dev_intf_trig_flag[intf_num] = 1;
+                                        if (test_trig_first_flag && test_trig_first_flag != (intf_num + 1))
+                                            return;
+                                    }
                                     if (square_wave_flag) {
                                         if (square_single_press_flag) {
                                             square_single_press_flag = 0;
@@ -2094,6 +2108,12 @@ void USBH_MainDeal( void )
                                         }
                                         key_trigger_cnt++;
                                         multi_key_Judg_cnt++;
+                                    }
+                                    if (square_wave_flag || triangle_wave_flag || simulation_curve_flag) {
+                                        if (!test_trig_first_flag) {
+                                            if (key_trigger_cnt)
+                                                test_trig_first_flag = intf_num + 1;
+                                        }
                                     }
                                 }
                                 if (!dev_intf_type[intf_num]) {

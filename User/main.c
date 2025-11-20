@@ -37,6 +37,7 @@ uint8_t  test_cnt = DELAY_TEST_CNT; /* 测试次数 */
 uint8_t  test_cnt_mode = 0;         /* 测试次数模式 */
 uint16_t key_trigger_cnt = 0;       /* 一次测试的多键判断计数 */
 uint16_t multi_key_Judg_cnt = 0;    /* 一次按下/抬起动作的多键判断计数 */
+uint8_t  test_trig_first_flag = 0;  /* 测试过程中首次触发标志， */
 
 uint8_t  square_wave_flag = 0;              /* 方波开启标志 */
 uint16_t square_wave_cnt = 0;               /* 方波周期计数 */
