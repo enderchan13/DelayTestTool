@@ -114,6 +114,19 @@ const uint8_t* image_main_test_cnt_addr[10] = {
     gImage_main_test_cnt_9,
 };
 
+const uint8_t* image_main_fw_num_addr[10] = {
+    gImage_main_fw_number_0,
+    gImage_main_fw_number_1,
+    gImage_main_fw_number_2,
+    gImage_main_fw_number_3,
+    gImage_main_fw_number_4,
+    gImage_main_fw_number_5,
+    gImage_main_fw_number_6,
+    gImage_main_fw_number_7,
+    gImage_main_fw_number_8,
+    gImage_main_fw_number_9,
+};
+
 uint8_t* product_name_image_addr[20];
 uint32_t product_name_image_x0[20];
 uint8_t* press_delay_image_addr[5];
@@ -626,7 +639,7 @@ void lcd_init(void)
     SPI1_DMA_Init();
     st7789X_init();
 
-    lcd_show_image(LCD_HEIGHT_START + 31, LCD_WIDTH_START + 0, 177, 20, (uint16_t *)gImage_main_tool_name);
+    lcd_show_image(LCD_HEIGHT_START + 10, LCD_WIDTH_START + 0, 177, 20, (uint16_t *)gImage_main_tool_name);
     lcd_show_image(LCD_HEIGHT_START + 10, LCD_WIDTH_START + 22, 60, 13, (uint16_t *)gImage_main_device_name);
     lcd_show_image(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 22, 100, 20, (uint16_t *)gImage_main_press_delay);
     lcd_show_image(LCD_HEIGHT_START + 120, LCD_WIDTH_START + 78, 100, 20, (uint16_t *)gImage_main_lift_delay);
@@ -635,6 +648,7 @@ void lcd_init(void)
     lcd_show_image(LCD_HEIGHT_START + 47, LCD_WIDTH_START + 84, 56, 14, (uint16_t *)gImage_main_simulate_click);
     lcd_show_image(LCD_HEIGHT_START + 10, LCD_WIDTH_START + 108, 35, 14, (uint16_t *)gImage_main_test_cnt_text);
     lcd_test_cnt_set(0);
+    lcd_fw_version_set(DELAY_TOOLS_FW_VERSION);
 }
 
 void lcd_press_delay_time_set(uint32_t press_delay)
@@ -795,4 +809,12 @@ void lcd_test_cnt_set(uint8_t cnt)
         lcd_show_image(LCD_HEIGHT_START + 45 + 10 + 10, LCD_WIDTH_START + 108, 9, 12, (uint16_t *)image_main_test_cnt_addr[0]);
     }
 
+}
+
+void lcd_fw_version_set(uint8_t* fw_ver)
+{
+    lcd_show_image(LCD_HEIGHT_START + 190, LCD_WIDTH_START - 2, 15, 26, (uint16_t *)gImage_main_fw_V);
+    lcd_show_image(LCD_HEIGHT_START + 190 + 15, LCD_WIDTH_START - 2, 15, 26, (uint16_t *)image_main_fw_num_addr[(fw_ver[1] - 0x30)]);
+    lcd_show_image(LCD_HEIGHT_START + 190 + 15 + 10, LCD_WIDTH_START - 2, 6, 26, (uint16_t *)gImage_main_fw_point);
+    lcd_show_image(LCD_HEIGHT_START + 190 + 15 + 10 + 6, LCD_WIDTH_START - 2, 15, 26, (uint16_t *)image_main_fw_num_addr[(fw_ver[3] - 0x30)]);
 }

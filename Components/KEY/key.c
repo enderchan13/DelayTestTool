@@ -40,6 +40,7 @@ extern uint8_t  test_mode;
 extern uint8_t  test_sta;
 extern uint8_t  test_cnt;
 extern uint8_t  test_cnt_mode;
+extern uint8_t  test_trig_first_flag;
 
 static void swkey1_short_press_handle(void)
 {
@@ -129,6 +130,7 @@ static void swkey3_short_press_handle(void)
         test_cnt = 100;
         lcd_test_cnt_set(100);
     }
+    test_trig_first_flag = 0;
 }
 
 static void swkey3_long_press_start_handle(void)

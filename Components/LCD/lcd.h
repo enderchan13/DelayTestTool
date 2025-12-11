@@ -20,6 +20,8 @@
 #include "ch32v30x_conf.h"
 #include "font/Lcd_Font.h"
 
+#define DELAY_TOOLS_FW_VERSION "V1.0"
+
 #define LCD_LED_PORT      GPIOA
 #define LCD_LED_PIN       (GPIO_Pin_2)
 
@@ -94,5 +96,6 @@ void lcd_test_mode_set(uint8_t mode);
 void lcd_test_state_set(uint8_t sta);
 void lcd_test_data_anomaly_set(uint8_t sta);
 void lcd_test_cnt_set(uint8_t cnt);
+void lcd_fw_version_set(uint8_t* fw_ver);
 
 #endif
